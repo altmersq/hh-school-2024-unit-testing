@@ -59,6 +59,8 @@ class LibraryManagerTest {
 
     @Test
     void testBorrowBookWhenBookNotInInventory() {
+        when(userService.isUserActive("user1")).thenReturn(true);
+
         String nonExistentBookId = "bookNotInInventory";
 
         boolean result = libraryManager.borrowBook(nonExistentBookId, "user1");
@@ -68,24 +70,13 @@ class LibraryManagerTest {
 
     @Test
     void testBorrowBookWhenBookOutOfStock() {
+        when(userService.isUserActive("user1")).thenReturn(true);
+
         libraryManager.addBook("bookOutOfStock", 0);
 
         boolean result = libraryManager.borrowBook("bookOutOfStock", "user1");
 
         assertFalse(result);
-    }
-
-    @Test
-    void testBorrowBookNoAvailableCopies() {
-        when(userService.isUserActive("user1")).thenReturn(true);
-
-        boolean result = libraryManager.borrowBook("book2", "user1");
-
-        assertTrue(result);
-
-        boolean secondResult = libraryManager.borrowBook("book2", "user2");
-
-        assertFalse(secondResult);
     }
 
     @Test
