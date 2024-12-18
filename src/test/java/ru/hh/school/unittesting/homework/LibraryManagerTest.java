@@ -99,6 +99,23 @@ class LibraryManagerTest {
     }
 
     @Test
+    void testReturnBookBorrowedByAnotherUser() {
+        when(userService.isUserActive("user1")).thenReturn(true);
+        libraryManager.borrowBook("book1", "user1");
+
+        boolean result = libraryManager.returnBook("book1", "user2");
+
+        assertFalse(result);
+    }
+
+    @Test
+    void testReturnBookNotBorrowedByAnyone() {
+        boolean result = libraryManager.returnBook("bookNotBorrowed", "user1");
+
+        assertFalse(result);
+    }
+
+    @Test
     void testGetAvailableCopies() {
         assertEquals(10, libraryManager.getAvailableCopies("book1"));
         assertEquals(5, libraryManager.getAvailableCopies("book2"));
